@@ -1,12 +1,20 @@
-import { createStore } from "redux";
+import { combineReducers, createStore } from "redux";
 
-const intiatState = {
+const intiatStateAccount = {
   balance: 0,
   loan: 0,
   loanPurpose: "",
 };
 
-const reducer = (state = intiatState, action) => {
+const intiatStateCustomer = {
+  fullName: "",
+  Id: "",
+  createdAt: "",
+};
+
+//In redux we dont directly dispatch actions to retucer but to store
+
+const accountReducer = (state = intiatStateAccount, action) => {
   //purpose of reducer is to calculte new state based on current state !
   //reducer are not allowed to update current state and nither they are allowerd to handle side effect cause by async functions
   switch (action.type) {
@@ -34,7 +42,28 @@ const reducer = (state = intiatState, action) => {
   }
 };
 
-const store = createStore(reducer);
+const nameReducer = (state = intiatStateCustomer, action) => {
+  switch (action.type) {
+    case "customer/createCustomer":
+      return {
+        ...state,
+        fullName: action.payload.fullName,
+        Id: action.payload.Id,
+        createdAt: action.payload.createdAt,
+      };
+    case "customer/updateName":
+      return { ...state, fullName: action.payload.fullName };
+    default:
+      return state;
+  }
+};
+
+const rootReducer = combineReducers({
+  account: accountReducer,
+  customer: nameReducer,
+});
+
+const store = createStore(rootReducer);
 // store.dispatch({ type: "account/deposit", payload: 500 });
 // console.log("Hey Redux");
 // console.log(store.getState());
@@ -74,4 +103,22 @@ store.dispatch(withdral(200));
 store.dispatch(requestLoan(500, "Buy a car"));
 console.log(store.getState());
 store.dispatch(payload());
+console.log(store.getState());
+
+const createCustomer = (fullName, Id) => {
+  //we could have created Id inside reducer function but we should avoid creating side effects inside use reducer
+  //reducer should be pure component becouse we have to keep it predicatable
+  return {
+    type: "customer/createCustomer",
+    payload: { fullName, Id, createdAt: new Date().toISOString() },
+  };
+};
+
+const updatingName = (fullName) => {
+  //we could have created Id inside reducer function but we should avoid creating side effects inside use reducer
+  //reducer should be pure component becouse we have to keep it predicatable
+  return { type: "customer/updateName", payload: fullName };
+};
+
+store.dispatch(createCustomer("shubham", 1234));
 console.log(store.getState());
