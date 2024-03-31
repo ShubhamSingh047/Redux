@@ -12,14 +12,13 @@ function AccountOperations() {
   const dispatch = useDispatch();
   const state = useSelector((store) => store.account);
 
-  console.log(state);
-
   function handleDeposit() {
     if (!depositAmount) return;
-    dispatch(deposit(depositAmount));
+    dispatch(deposit(depositAmount, currency));
     setDepositAmount("");
+    setCurrency("");
   }
-
+  console.log(state.account);
   function handleWithdrawal() {
     if (!withdrawalAmount) return;
     if (withdrawalAmount > state.balance) return;
@@ -93,7 +92,7 @@ function AccountOperations() {
         </div>
 
         <div>
-          <span>{`Pay back ${state.loan} `}</span>
+          <span>{`Pay back ${state.loan} ${state.loanPurpose} `}</span>
           <button onClick={handlePayLoan}> Pay loan</button>
         </div>
       </div>

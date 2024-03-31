@@ -4,6 +4,7 @@ import AccountOperations from "./features/account/AccountOperations";
 import BalanceDisplay from "./features/account/BalanceDisplay";
 import store from "./store-v1";
 import { useSelector } from "react-redux";
+import {configureStore} from "@reduxjs/toolkit"
 
 function App() {
   const { fullName } = useSelector((state) => state.customer);

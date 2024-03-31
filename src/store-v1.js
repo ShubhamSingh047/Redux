@@ -1,6 +1,11 @@
-import { combineReducers, createStore } from "redux";
-import accountSlice from "./features/account/accountSlice";
-import customerSlice from "./features/customers/customerSlice";
+import accountReducer from "./features/account/accountSlice";
+import customerReducer from "./features/customers/customerSlice";
+
+/* ---------------- Old ways to write redux thunk ! ---------------------
+
+import { applyMiddleware, combineReducers, createStore } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import { thunk } from "redux-thunk";
 
 //In redux we dont directly dispatch actions to retucer but to store
 
@@ -9,7 +14,10 @@ const rootReducer = combineReducers({
   customer: customerSlice,
 });
 
-const store = createStore(rootReducer);
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
 // store.dispatch({ type: "account/deposit", payload: 500 });
 // console.log("Hey Redux");
 // console.log(store.getState());
@@ -21,5 +29,17 @@ const store = createStore(rootReducer);
 //   },
 // });
 // console.log(store.getState());
+
+     -----------------New way toolkit-----------------
+*/
+
+import { configureStore } from "@reduxjs/toolkit";
+
+const store = configureStore({
+  reducer: {
+    account: accountReducer,
+    customer: customerReducer,
+  },
+});
 
 export default store;
